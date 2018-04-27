@@ -6,6 +6,15 @@
 PrimaryGen::PrimaryGen() {
     gun = new G4ParticleGun(1);
     G4cout<<"Primary particles generator is created successfully\t\tOK!!!"<<G4endl;
+    gun->SetParticleDefinition(G4Gamma::GammaDefinition());
+    gun->SetParticleEnergy(662 * keV);
+    gun->SetParticlePosition(G4ThreeVector(0,0,0));
+
+    double x = 2*G4UniformRand()-1;
+    double y = 2*G4UniformRand()-1;
+    double z = 2*G4UniformRand()-1;
+    double r = sqrt(x*x + y*y + z*z);
+    gun->SetParticleMomentumDirection(G4ThreeVector(x/r, y/r, z/r));
 }
 
 PrimaryGen::~PrimaryGen() {
@@ -13,9 +22,8 @@ PrimaryGen::~PrimaryGen() {
 }
 
 void PrimaryGen::GeneratePrimaries(G4Event* anEvent) {
-    gun->SetParticleDefinition(G4Gamma::GammaDefinition());
-    gun->SetParticleEnergy(662 * keV);
 
+    gun->GeneratePrimaryVertex(anEvent);
 //    double R = 10*cm, px, py, pz;
 //
 //     do {
@@ -26,16 +34,8 @@ void PrimaryGen::GeneratePrimaries(G4Event* anEvent) {
 //
 //    gun->SetParticlePosition(G4ThreeVector(px,-3*m + py, pz));
 
-    gun->SetParticlePosition(G4ThreeVector(0,0,0));
 
-    double x = 2*G4UniformRand()-1;
-    double y = 2*G4UniformRand()-1;
-    double z = 2*G4UniformRand()-1;
-    double r = sqrt(x*x + y*y + z*z);
+       // gun->SetParticleMomentumDirection(G4ThreeVector(1, 1, 0));
 
-//    gun->SetParticleMomentumDirection(G4ThreeVector(x/r, y/r, z/r));
-    gun->SetParticleMomentumDirection(G4ThreeVector(1, 0, 0));
-
-
-    gun->GeneratePrimaryVertex(anEvent);
+        gun->GeneratePrimaryVertex(anEvent);
 }
